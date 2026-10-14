@@ -14,6 +14,7 @@ Status labels follow the acceptance rule: **Implemented and tested**, **Implemen
 - [x] Optional pinch-to-draw with normalized gap and engage/release hysteresis — **Implemented and tested** at geometry level.
 - [x] Open palm and closed fist recognition, each independently enabled, only pauses drawing — **Implemented but not fully tested**. Temporal debouncing is tested; realistic hand-angle/light variation needs webcam trials.
 - [x] Gesture debounce and temporal stability — **Implemented and tested** with unit tests.
+- [x] Immediate open-palm/fist stroke stop and optional adjustable hand-proximity pause with hysteresis — **Implemented and tested** with unit and controls tests; the size threshold is a relative camera-frame estimate and should be calibrated on the user's webcam.
 - [x] Visible gesture status — **Implemented but not fully tested**; UI status exists, but live browser rendering could not be verified because local HTTP access is blocked in this device environment.
 - [x] No gesture can erase artwork or change tools; the eraser is a deliberate toolbar choice — **Implemented and tested** by code-path inspection and separate eraser rendering tests.
 - [x] Realistic webcam gesture robustness across varied users/camera setups — **Implemented but not fully tested**; classification heuristics exist, but physical webcam trials are required and synthetic tests do not establish real-world robustness.

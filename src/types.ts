@@ -30,6 +30,8 @@ export interface GestureSettings {
   pinch: boolean;
   openPalm: boolean;
   fist: boolean;
+  proximityGuard: boolean;
+  proximityLimit: number;
 }
 export interface Landmark { x: number; y: number; z?: number; }
 export interface HandData { landmarks: Landmark[]; handedness?: string; score?: number; }

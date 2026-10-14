@@ -11,7 +11,7 @@ GestureCanvas explores touch-free creative input for sketching and classroom dem
 - Explicit, user-initiated camera start/stop; local MediaPipe Hand Landmarker, two-hand support, mirrored preview, landmark overlay, handedness and fingertip cursor.
 - Camera-free simulated tracking visibly labeled as simulated, plus mouse/touch input.
 - Adaptive off/low/medium/high smoothing with speed-sensitive response and jitter filtering.
-- Pinch-to-draw; debounced open-palm/fist pause controls; individual switches; gestures never erase or switch tools.
+- Pinch-to-draw; open-palm/fist pause gestures stop strokes immediately; optional hand-proximity pause estimates palm scale in the camera frame with an adjustable limit and hysteresis. Gestures never erase or switch tools.
 - Pen, marker, eraser, line, rectangle, ellipse, arrow and text tools; custom/palette colors, brush width and opacity, undo/redo, canvas backgrounds, symmetry and guides.
 - Select mode hit-tests visible drawing objects; drag a selected stroke, shape or text to reposition it, then use **Delete selected** to remove that object. Movement and removal can both be undone/redone. Pinch-to-draw still creates an object between pinch and release.
 - Optional live camera-feed canvas background for in-camera composition. Select it in **Canvas → Camera feed** while the camera is on. The feed is preview-only and is never recorded, saved into artwork, or included in PNG exports; choose a solid/transparent background for exports.
@@ -108,7 +108,7 @@ Camera startup is opt-in and requests no audio. Frames are processed in this bro
 
 ## Limitations
 
-Gesture classification uses landmark-geometry heuristics and should be calibrated for camera angle, hand pose and lighting. Inference runs synchronously on the browser main thread, so frame cadence depends on the device. This machine could not fetch the model and did not expose a physical-camera test, so real-world ML accuracy and physical camera startup remain unverified. The simulated demo tests application drawing integration only. The gallery is per-browser, not a cloud library.
+Gesture classification and hand-proximity estimation use landmark-geometry heuristics; proximity is a relative camera-frame estimate, not calibrated physical distance, and should be calibrated for camera angle, hand pose, framing and lighting. Inference runs synchronously on the browser main thread, so frame cadence depends on the device. This machine could not fetch the model and did not expose a physical-camera test, so real-world ML accuracy and physical camera startup remain unverified. The simulated demo tests application drawing integration only. The gallery is per-browser, not a cloud library.
 
 ## References
 
