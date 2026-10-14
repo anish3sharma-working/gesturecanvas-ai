@@ -1,0 +1,18 @@
+flowchart TD
+    A[Select pen, marker, eraser, shape or text] --> B[Choose color, size and opacity]
+    B --> C[Pointer/touch or tracked fingertip input]
+    C --> D{Tool type}
+    D -- Pen or marker --> E[Interpolate smoothed stroke]
+    D -- Eraser --> F[Destination-out on artwork layer only]
+    D -- Line, rectangle, ellipse or arrow --> G[Drag start to end]
+    D -- Text --> H[Place text and enter content]
+    E --> I[Commit complete drawing item]
+    F --> I
+    G --> I
+    H --> I
+    I --> J[Independent artwork canvas]
+    J --> K[Undo/redo item history]
+    J --> L[Save/rename in local artwork library]
+    J --> M[Render off-screen PNG canvas]
+    M --> N[Transparent PNG contains artwork only]
+    J --> O[Symmetry and optional guides]

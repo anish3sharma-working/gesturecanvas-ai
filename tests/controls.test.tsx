@@ -1,0 +1,21 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import Controls from '../src/components/Controls';
+import type { GestureSettings, Tool } from '../src/types';
+
+function setup(selectedItemId: string | null = null) {
+  const calls = { setTool: vi.fn(), setColor: vi.fn(), setSize: vi.fn(), setOpacity: vi.fn(), setLandmarks: vi.fn(), setBackground: vi.fn(), startCamera: vi.fn(), startDemo: vi.fn(), toggleDrawing: vi.fn(), clear: vi.fn(), deleteSelected: vi.fn() };
+  const props: any = { tool: 'pen', setTool: calls.setTool, color: '#17191f', setColor: calls.setColor, size: 8, setSize: calls.setSize, opacity: 100, setOpacity: calls.setOpacity, smoothing: 'medium', setSmoothing: vi.fn(), background: 'transparent', setBackground: calls.setBackground, backgroundColor: '#fff', setBackgroundColor: vi.fn(), guide: 'none', setGuide: vi.fn(), symmetry: false, setSymmetry: vi.fn(), gestures: { pinch: true, openPalm: true, fist: false } as GestureSettings, setGestures: vi.fn(), canUndo: false, canRedo: false, undo: vi.fn(), redo: vi.fn(), clear: calls.clear, save: vi.fn(), exportPng: vi.fn(), openGallery: vi.fn(), cameraStatus: 'Camera off', gesture: 'Ready', toggleDrawing: calls.toggleDrawing, drawing: false, landmarks: true, setLandmarks: calls.setLandmarks, startCamera: calls.startCamera, stopCamera: vi.fn(), startDemo: calls.startDemo, stopDemo: vi.fn(), simulated: false, selectedItemId, deleteSelected: calls.deleteSelected };
+  return { ...render(<Controls {...props}/>), calls };
+}
+
+describe('studio controls', () => {
+  it('selects drawing tools without hidden gesture switching', () => { const { calls } = setup(); fireEvent.click(screen.getByRole('button', { name: 'Eraser tool' })); expect(calls.setTool).toHaveBeenCalledWith('eraser' satisfies Tool); });
+  it('exposes the Select tool and requests selection mode', () => { const { calls } = setup(); fireEvent.click(screen.getByRole('button', { name: 'Select tool' })); expect(calls.setTool).toHaveBeenCalledWith('select'); });
+  it('offers a camera-feed background choice', () => { const { calls } = setup(); fireEvent.change(screen.getByLabelText('Canvas background'), { target: { value: 'camera' } }); expect(calls.setBackground).toHaveBeenCalledWith('camera'); expect(screen.getByText(/preview-only/i)).toBeInTheDocument(); });
+  it('disables direct deletion when no object is selected and deletes a selected object on request', () => { const first = setup(); expect(screen.getByRole('button', { name: 'Delete selected object' })).toBeDisabled(); first.unmount(); const { calls } = setup('object-1'); fireEvent.click(screen.getByRole('button', { name: 'Delete selected object' })); expect(calls.deleteSelected).toHaveBeenCalledOnce(); });
+  it('changes the selected custom color', () => { const { calls } = setup(); fireEvent.change(screen.getByLabelText('Custom color'), { target: { value: '#12abef' } }); expect(calls.setColor).toHaveBeenCalledWith('#12abef'); });
+  it('adjusts brush size and opacity', () => { const { calls } = setup(); fireEvent.change(screen.getByLabelText(/brush size/i), { target: { value: '24' } }); fireEvent.change(screen.getByLabelText(/opacity/i), { target: { value: '55' } }); expect(calls.setSize).toHaveBeenCalledWith(24); expect(calls.setOpacity).toHaveBeenCalledWith(55); });
+  it('keeps camera opt-in and offers the non-camera demo', () => { const { calls } = setup(); fireEvent.click(screen.getByRole('button', { name: 'Start camera' })); fireEvent.click(screen.getByRole('button', { name: /try demo/i })); expect(calls.startCamera).toHaveBeenCalledOnce(); expect(calls.startDemo).toHaveBeenCalledOnce(); });
+  it('toggles drawing explicitly and exposes the landmark option', () => { const { calls } = setup(); fireEvent.click(screen.getByRole('button', { name: /start drawing/i })); fireEvent.click(screen.getByLabelText(/show hand landmarks/i)); expect(calls.toggleDrawing).toHaveBeenCalledOnce(); expect(calls.setLandmarks).toHaveBeenCalledWith(false); });
+});

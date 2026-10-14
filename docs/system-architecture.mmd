@@ -1,0 +1,18 @@
+flowchart LR
+    User[User] -->|Explicit permission| Camera[Webcam video stream]
+    Camera --> Preview[Mirrored video preview]
+    Camera --> Vision[MediaPipe Tasks Vision]
+    Vision --> Model[Pretrained hand_landmarker.task]
+    Vision --> Landmarks[21 landmarks and handedness]
+    Landmarks --> Gesture[Debounced gesture geometry]
+    Landmarks --> Stabilizer[Adaptive speed-aware smoothing]
+    Stabilizer --> Mapper[Mirror, aspect-ratio and canvas mapping]
+    Mapper --> Drawing[Canvas drawing engine]
+    Pointer[Mouse and touch fallback] --> Drawing
+    Sim[Clearly labeled simulated coordinates] --> Gesture
+    Sim --> Stabilizer
+    Gesture --> Drawing
+    Drawing --> History[Stroke history and undo/redo]
+    History --> Artwork[Independent artwork layer]
+    Artwork --> PNG[Transparent PNG exporter]
+    History --> IDB[IndexedDB artwork library]

@@ -1,0 +1,23 @@
+flowchart TD
+    A[User chooses Start camera] --> B{Browser supports camera API?}
+    B -- No --> E[Actionable message or simulated demo]
+    B -- Yes --> C[Browser requests permission]
+    C --> D{Permission granted?}
+    D -- No --> E
+    D -- Yes --> F[Display mirrored video]
+    F --> G[Load local MediaPipe WASM and task bundle]
+    G --> H{Model initialized?}
+    H -- No --> I[Show model recovery message]
+    I --> J[Continue with simulated mode or mouse/touch]
+    H -- Yes --> K[Sample video frames at controlled cadence]
+    K --> L[Detect up to two hands]
+    L --> M[Return 21 image-space landmarks and handedness]
+    M --> N[Classify fingertip geometry]
+    N --> O[Require stable multi-frame gesture]
+    M --> P[Adaptive low-pass smoothing]
+    P --> Q[Mirror and aspect-ratio coordinate mapping]
+    O --> R{Drawing enabled or stable pinch?}
+    Q --> R
+    R -- Yes --> S[Append fingertip sample to drawing item]
+    R -- No --> T[Render cursor and safe pause state]
+    S --> U[Independent artwork canvas]
